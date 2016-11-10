@@ -8,7 +8,9 @@ If you have JSON/YAML, then just parse the JSON/YAML into a hash and pass it in.
 
 ## Installation
 
-TODO
+```bash
+gem install normalizr.rb
+```
 
 
 ## Usage
