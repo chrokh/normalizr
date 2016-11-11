@@ -1,7 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'normalizr.rb'
-  s.version     = '0.0.1'
-  s.date        = '2016-11-10'
+  s.version     = '0.0.2'
   s.summary     = "Normalize deeply nested hash based on a schema"
   s.description = "Normalize deeply nested hash based on a schema"
   s.authors     = ["Christopher Okhravi"]

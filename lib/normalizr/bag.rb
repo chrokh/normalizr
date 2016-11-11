@@ -1,3 +1,5 @@
+require 'securerandom'
+
 module Normalizr
   class Bag
     def initialize bag={}
