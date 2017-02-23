@@ -21,6 +21,24 @@ describe Normalizr, '.normalize!' do
     })
   }
 
+  context 'when key has no value' do
+    let(:input) {
+      {
+        posts: []
+      }
+    }
+    let(:expected) {
+      {
+        posts: {}
+      }
+    }
+
+    xit 'replaces arrays with hashes' do
+      actual = Normalizr.normalize!(input, { posts: ArrayOf.new(post) })
+      expect(actual).to eq(expected)
+    end
+  end
+
 
   context 'with ids' do
 
