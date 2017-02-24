@@ -13,6 +13,10 @@ module Normalizr
       value[:id]
     end
 
+    def get name, id
+      @bag[name.to_sym][id]
+    end
+
     def to_hash
       @bag.dup
     end

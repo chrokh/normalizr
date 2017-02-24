@@ -9,5 +9,9 @@ module Normalizr
       Array(obj).map { |item| @schema.visit(item, bag) }
     end
 
+    def unvisit obj, ids
+      ids.map { |id| @schema.unvisit(obj, id) }
+    end
+
   end
 end

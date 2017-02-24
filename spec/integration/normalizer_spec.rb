@@ -2,7 +2,7 @@ require 'normalizr/normalizr'
 require 'normalizr/schema'
 require 'normalizr/array_of'
 
-describe Normalizr, '.normalize!' do
+describe Normalizr do
 
   Schema = Normalizr::Schema
   ArrayOf = Normalizr::ArrayOf
@@ -19,6 +19,14 @@ describe Normalizr, '.normalize!' do
       author: author,
       comments: ArrayOf.new(comment)
     })
+  }
+  let(:posts) {
+    ArrayOf.new(post)
+  }
+  let(:schema) {
+    {
+      posts: posts
+    }
   }
 
   context 'when key has no value' do
@@ -42,8 +50,8 @@ describe Normalizr, '.normalize!' do
 
   context 'with ids' do
 
-    it 'normalizes' do
-      obj = {
+    let(:data) {
+      {
         posts: [
           {
             id: 11,
@@ -51,19 +59,21 @@ describe Normalizr, '.normalize!' do
             comments: [
               { id: 33, title: 'comment 1' },
               { id: 44, title: 'comment 2' },
-          ],
-          author: { id: 55, name: 'doe' }
+            ],
+            author: { id: 55, name: 'doe' }
           },
           {
             id: 22,
+            comments: [],
             title: 'post 2',
             author: { id: 55, name: 'doe' }
           }
         ],
       }
+    }
 
-      actual = Normalizr.normalize!(obj, { posts: ArrayOf.new(post) })
-      expected = {
+    let(:expected) {
+      {
         posts: {
           11 => {
             id: 11,
@@ -86,8 +96,29 @@ describe Normalizr, '.normalize!' do
           55 => { id: 55, name: 'doe' },
         }
       }
-      expect(actual).to eq expected
+    }
+
+    context 'provided as hash' do
+      it 'can normalize' do
+        actual = Normalizr.normalize!(data, schema)
+        expect(actual).to eq expected
+      end
     end
+
+    context 'provided as schema' do
+      it 'can normalize' do
+        actual = Normalizr.normalize!(data[:posts], posts)
+        expect(actual).to eq expected
+      end
+    end
+
+    context 'provided as hash' do
+      it 'can denormalize' do
+        actual = Normalizr.denormalize!(expected, schema)
+        expect(actual).to eq data
+      end
+    end
+
   end
 
 
@@ -128,3 +159,4 @@ describe Normalizr, '.normalize!' do
     end
   end
 end
+

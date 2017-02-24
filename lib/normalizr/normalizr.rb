@@ -1,6 +1,7 @@
 require 'normalizr/bag'
 
 module Normalizr
+
   def self.normalize! obj, schema
     bag = Normalizr::Bag.new
 
@@ -14,4 +15,13 @@ module Normalizr
 
     bag.to_hash
   end
+
+
+  def self.denormalize! obj, schema
+    schema.keys.map do |key|
+      value = schema[key].unvisit(obj, obj[key].keys)
+      Hash[key, value]
+    end.reduce({}, &:merge)
+  end
+
 end

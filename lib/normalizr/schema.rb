@@ -1,10 +1,12 @@
 module Normalizr
   class Schema
 
+
     def initialize name, definition={}
       @name = name
       @definition = definition
     end
+
 
     def visit obj, bag
       relationships = @definition.keys.map do |key|
@@ -14,6 +16,19 @@ module Normalizr
 
       bag.add(@name, obj.merge(relationships))
     end
+
+
+    def unvisit obj, id
+      normalized = obj[@name.to_sym][id]
+
+      denormalized = @definition.keys.map do |key|
+        value = @definition[key].unvisit(obj, normalized[key])
+        Hash[key, value]
+      end.reduce({}, &:merge)
+
+      normalized.merge(denormalized)
+    end
+
 
   end
 end
