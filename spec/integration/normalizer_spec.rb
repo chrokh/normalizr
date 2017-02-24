@@ -98,22 +98,19 @@ describe Normalizr do
       }
     }
 
-    context 'provided as hash' do
-      it 'can normalize' do
+    context '#normalize' do
+      it 'handles hash' do
         actual = Normalizr.normalize!(denormalized, schema)
         expect(actual).to eq normalized
       end
-    end
 
-    context 'provided as schema' do
-      it 'can normalize' do
+      it 'handles schema' do
         actual = Normalizr.normalize!(denormalized[:posts], posts)
         expect(actual).to eq normalized
       end
     end
 
-    context 'provided as hash, #denormalize' do
-
+    context '#denormalize, given hash' do
       it 'works' do
         actual = Normalizr.denormalize!(normalized, schema)
         expect(actual).to eq denormalized
