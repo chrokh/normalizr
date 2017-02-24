@@ -119,6 +119,11 @@ describe Normalizr do
       end
 
       it 'can denormalize a specific entry' do
+        actual = Normalizr.denormalize!(expected, schema, 22)
+        expect(actual[:posts]).to eq [data[:posts][1]]
+      end
+
+      it 'can denormalize multiple specific entries' do
         actual = Normalizr.denormalize!(expected, schema, [22])
         expect(actual[:posts]).to eq [data[:posts][1]]
       end

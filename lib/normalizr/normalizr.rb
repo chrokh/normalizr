@@ -22,7 +22,7 @@ module Normalizr
       if id.nil?
         value = schema[key].unvisit(obj, obj[key].keys)
       else
-        value = schema[key].unvisit(obj, id)
+        value = schema[key].unvisit(obj, Array(id))
       end
       Hash[key, value]
     end.reduce({}, &:merge)
