@@ -8,24 +8,26 @@ describe Normalizr do
   ArrayOf = Normalizr::ArrayOf
 
   # Prepare schema
-  let(:comment) {
-    Schema.new('comments')
-  }
-  let(:author) {
-    Schema.new('authors')
-  }
   let(:post) {
     Schema.new('posts', {
       author: author,
       comments: ArrayOf.new(comment)
     })
   }
-  let(:posts) {
-    ArrayOf.new(post)
-  }
+  let(:comment) { Schema.new('comments') }
+  let(:author)  { Schema.new('authors') }
+  let(:posts)   { ArrayOf.new(post) }
+  let(:extra)   { Schema.new('extras') }
+  let(:extras)  { ArrayOf.new(extra) }
   let(:schema) {
     {
-      posts: posts
+      posts: posts,
+    }
+  }
+  let(:schema_with_extras) {
+    {
+      posts: posts,
+      extras: extras,
     }
   }
 
@@ -94,9 +96,12 @@ describe Normalizr do
         },
         authors: {
           55 => { id: 55, name: 'doe' },
-        }
+        },
       }
     }
+
+    let(:denormalized_with_extras) { denormalized.merge(extras: []) }
+    let(:normalized_with_extras)   { normalized.merge(extras: {}) }
 
     context '#normalize' do
       it 'handles hash' do
@@ -107,6 +112,11 @@ describe Normalizr do
       it 'handles schema' do
         actual = Normalizr.normalize!(denormalized[:posts], posts)
         expect(actual).to eq normalized
+      end
+
+      it 'handles empty collections' do
+        actual = Normalizr.normalize!(denormalized_with_extras, schema_with_extras)
+        expect(actual).to eq normalized_with_extras
       end
     end
 
@@ -124,6 +134,11 @@ describe Normalizr do
       it 'can pick multiple specific entries' do
         actual = Normalizr.denormalize!(normalized, schema, [22])
         expect(actual[:posts]).to eq [denormalized[:posts][1]]
+      end
+
+      it 'handles empty collections' do
+        actual = Normalizr.denormalize!(normalized_with_extras, schema_with_extras)
+        expect(actual).to eq denormalized_with_extras
       end
     end
 

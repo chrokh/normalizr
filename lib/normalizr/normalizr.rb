@@ -13,7 +13,17 @@ module Normalizr
       schema.visit(obj, bag)
     end
 
-    bag.to_hash
+    hash = bag.to_hash
+
+    if schema.is_a? Hash
+      schema.keys.each do |key|
+        unless hash.has_key? key
+          hash[key] = {}
+        end
+      end
+    end
+
+    hash
   end
 
 
