@@ -50,7 +50,7 @@ describe Normalizr do
 
   context 'with ids' do
 
-    let(:data) {
+    let(:denormalized) {
       {
         posts: [
           {
@@ -72,7 +72,7 @@ describe Normalizr do
       }
     }
 
-    let(:expected) {
+    let(:normalized) {
       {
         posts: {
           11 => {
@@ -100,33 +100,33 @@ describe Normalizr do
 
     context 'provided as hash' do
       it 'can normalize' do
-        actual = Normalizr.normalize!(data, schema)
-        expect(actual).to eq expected
+        actual = Normalizr.normalize!(denormalized, schema)
+        expect(actual).to eq normalized
       end
     end
 
     context 'provided as schema' do
       it 'can normalize' do
-        actual = Normalizr.normalize!(data[:posts], posts)
-        expect(actual).to eq expected
+        actual = Normalizr.normalize!(denormalized[:posts], posts)
+        expect(actual).to eq normalized
       end
     end
 
     context 'provided as hash, #denormalize' do
 
       it 'works' do
-        actual = Normalizr.denormalize!(expected, schema)
-        expect(actual).to eq data
+        actual = Normalizr.denormalize!(normalized, schema)
+        expect(actual).to eq denormalized
       end
 
       it 'can pick specific entry' do
-        actual = Normalizr.denormalize!(expected, schema, 22)
-        expect(actual[:posts]).to eq [data[:posts][1]]
+        actual = Normalizr.denormalize!(normalized, schema, 22)
+        expect(actual[:posts]).to eq [denormalized[:posts][1]]
       end
 
       it 'can pick multiple specific entries' do
-        actual = Normalizr.denormalize!(expected, schema, [22])
-        expect(actual[:posts]).to eq [data[:posts][1]]
+        actual = Normalizr.denormalize!(normalized, schema, [22])
+        expect(actual[:posts]).to eq [denormalized[:posts][1]]
       end
     end
 
