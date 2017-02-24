@@ -102,6 +102,10 @@ describe Normalizr do
 
     let(:denormalized_with_extras) { denormalized.merge(extras: []) }
     let(:normalized_with_extras)   { normalized.merge(extras: {}) }
+    let(:broken_denormalized_with_extras) { denormalized.merge(extras: nil) }
+    let(:broken_normalized_with_extras)   { normalized.merge(extras: nil) }
+    let(:value_broken_denormalized_with_extras) { denormalized.merge(extras: :some_value) }
+    let(:value_broken_normalized_with_extras)   { normalized.merge(extras: :some_value) }
 
     context '#normalize' do
       it 'handles hash' do
@@ -117,6 +121,16 @@ describe Normalizr do
       it 'handles empty collections' do
         actual = Normalizr.normalize!(denormalized_with_extras, schema_with_extras)
         expect(actual).to eq normalized_with_extras
+      end
+
+      it 'handles broken collections containing nil' do
+        actual = Normalizr.normalize!(broken_denormalized_with_extras, schema_with_extras)
+        expect(actual).to eq normalized_with_extras
+      end
+
+      it 'handles broken collections containing values' do
+        actual = Normalizr.normalize!(value_broken_denormalized_with_extras, schema_with_extras)
+        expect(actual).to eq value_broken_normalized_with_extras
       end
     end
 
@@ -139,6 +153,16 @@ describe Normalizr do
       it 'handles empty collections' do
         actual = Normalizr.denormalize!(normalized_with_extras, schema_with_extras)
         expect(actual).to eq denormalized_with_extras
+      end
+
+      it 'handles broken collections containing nil' do
+        actual = Normalizr.denormalize!(broken_normalized_with_extras, schema_with_extras)
+        expect(actual).to eq denormalized_with_extras
+      end
+
+      it 'handles broken collections containing values' do
+        actual = Normalizr.denormalize!(value_broken_normalized_with_extras, schema_with_extras)
+        expect(actual).to eq value_broken_denormalized_with_extras
       end
     end
 

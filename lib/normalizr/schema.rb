@@ -9,12 +9,14 @@ module Normalizr
 
 
     def visit obj, bag
-      relationships = @definition.keys.map do |key|
-        id = @definition[key].visit(obj[key], bag)
-        Hash[key, id]
-      end.reduce({}, &:merge)
+      if obj.is_a? Hash
+        relationships = @definition.keys.map do |key|
+          id = @definition[key].visit(obj[key], bag)
+          Hash[key, id]
+        end.reduce({}, &:merge)
 
-      bag.add(@name, obj.merge(relationships))
+        bag.add(@name, obj.merge(relationships))
+      end
     end
 
 
