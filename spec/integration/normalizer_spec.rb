@@ -112,18 +112,19 @@ describe Normalizr do
       end
     end
 
-    context 'provided as hash' do
-      it 'can denormalize' do
+    context 'provided as hash, #denormalize' do
+
+      it 'works' do
         actual = Normalizr.denormalize!(expected, schema)
         expect(actual).to eq data
       end
 
-      it 'can denormalize a specific entry' do
+      it 'can pick specific entry' do
         actual = Normalizr.denormalize!(expected, schema, 22)
         expect(actual[:posts]).to eq [data[:posts][1]]
       end
 
-      it 'can denormalize multiple specific entries' do
+      it 'can pick multiple specific entries' do
         actual = Normalizr.denormalize!(expected, schema, [22])
         expect(actual[:posts]).to eq [data[:posts][1]]
       end
