@@ -17,9 +17,13 @@ module Normalizr
   end
 
 
-  def self.denormalize! obj, schema
+  def self.denormalize! obj, schema, id=nil
     schema.keys.map do |key|
-      value = schema[key].unvisit(obj, obj[key].keys)
+      if id.nil?
+        value = schema[key].unvisit(obj, obj[key].keys)
+      else
+        value = schema[key].unvisit(obj, id)
+      end
       Hash[key, value]
     end.reduce({}, &:merge)
   end
