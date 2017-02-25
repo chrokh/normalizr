@@ -155,6 +155,12 @@ describe Normalizr do
           id = actual[:posts][actual[:posts].keys[0]][:author]
           expect(actual[:authors][id][:name]).to eq 'doe'
         end
+
+        it 'does not mutate original hash' do
+          original = denormalized.dup
+          Normalizr.normalize!(denormalized, schema, { new_keys: true })
+          expect(denormalized).to eq original
+        end
       end
     end
 
