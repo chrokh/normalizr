@@ -94,6 +94,16 @@ Normalizr.normalize!(obj, {
 **Remember**: If you want to say `Schema` (and so forth) rather than `Normalizr::Schema` you have to `include Normalizr`.
 
 
+
+## Do you want new IDs?
+
+If your hash does **not** have IDs, normalizr will generate them for you. If your hash **do** have IDs then normalizr will not overwrite them but assume you are using them appropriately. If your hash has IDs but you want to **generate new IDs anyway**, then invoke normalizr like this:
+
+```ruby
+Normalizr.normalize!(obj, schema, { new_keys: true })
+```
+
+
 ## API Reference
 
 TODO

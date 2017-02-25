@@ -132,6 +132,30 @@ describe Normalizr do
         actual = Normalizr.normalize!(value_broken_denormalized_with_extras, schema_with_extras)
         expect(actual).to eq value_broken_normalized_with_extras
       end
+
+
+      context 'when asking for new ids' do
+        it 'creates new ids but maintains relationships' do
+          actual = Normalizr.normalize!(denormalized, schema, { new_keys: true })
+          expect(actual[:posts].length).to eq 2
+          expect(actual[:posts].keys).not_to eq([11, 22])
+          expect(actual[:comments].keys).not_to eq([33, 44])
+          expect(actual[:authors].keys).not_to eq([55])
+        end
+
+        it 'maintains relationships' do
+          actual = Normalizr.normalize!(denormalized, schema, { new_keys: true })
+
+          id = actual[:posts][actual[:posts].keys[0]][:comments][0]
+          expect(actual[:comments][id][:title]).to eq 'comment 1'
+
+          id = actual[:posts][actual[:posts].keys[0]][:comments][1]
+          expect(actual[:comments][id][:title]).to eq 'comment 2'
+
+          id = actual[:posts][actual[:posts].keys[0]][:author]
+          expect(actual[:authors][id][:name]).to eq 'doe'
+        end
+      end
     end
 
     context '#denormalize, given hash' do

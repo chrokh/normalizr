@@ -2,12 +2,15 @@ require 'securerandom'
 
 module Normalizr
   class Bag
-    def initialize bag={}
+    def initialize bag={}, opts
       @bag = bag
+      @opts = opts
     end
 
     def add name, value
-      value[:id] ||= next_guid!
+      if value[:id].nil? || @opts[:new_keys]
+        value[:id] = next_guid!
+      end
       @bag[name.to_sym] ||= {}
       @bag[name.to_sym][value[:id]] = value
       value[:id]

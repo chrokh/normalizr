@@ -2,8 +2,8 @@ require 'normalizr/bag'
 
 module Normalizr
 
-  def self.normalize! obj, schema
-    bag = Normalizr::Bag.new
+  def self.normalize! obj, schema, opts={}
+    bag = Normalizr::Bag.new(opts)
 
     if schema.is_a? Hash
       schema.keys.each do |key|
