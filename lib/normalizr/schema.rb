@@ -21,7 +21,10 @@ module Normalizr
 
 
     def unvisit obj, id
-      normalized = obj[@name.to_sym][id]
+      # TODO: Write test for why this conditional needs to be here.
+      # I believe it has something to do with whether the root keys
+      # are originally symbols or non-symbols.
+      normalized = (obj[@name][id] || obj[@name][id.to_sym])
 
       denormalized = @definition.keys.map do |key|
         value = @definition[key].unvisit(obj, normalized[key])
