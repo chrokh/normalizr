@@ -196,6 +196,32 @@ describe Normalizr do
       end
     end
 
+
+    context 'when foreign key refers to non-existing type' do
+      let(:normalized) { { posts: { 1 => { comments: [2] } } } }
+      let(:schema) {
+        { posts: ArrayOf.new(Schema.new(:posts, { comments: ArrayOf.new(Schema.new(:comments)) })) }
+      }
+      it 'raises' do
+        expect { Normalizr.denormalize!(normalized, schema) }.to raise_error(ArgumentError)
+      end
+    end
+
+    context 'when foreign key refers to non-existing record' do
+      let(:normalized) {
+        {
+          posts: { 1 => { comments: [1, 2] } },
+          comments: { 1 => { id: 1 } }
+        }
+      }
+      let(:schema) {
+        { posts: ArrayOf.new(Schema.new(:posts, { comments: ArrayOf.new(Schema.new(:comments)) })) }
+      }
+      it 'raises' do
+        expect { Normalizr.denormalize!(normalized, schema) }.to raise_error(ArgumentError)
+      end
+    end
+
   end
 
 
