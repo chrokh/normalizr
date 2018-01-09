@@ -1,6 +1,4 @@
-require 'normalizr/normalizr'
-require 'normalizr/schema'
-require 'normalizr/array_of'
+require 'normalizr'
 
 describe Normalizr do
 

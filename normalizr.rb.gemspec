@@ -12,4 +12,6 @@ Gem::Specification.new do |s|
   ]
   s.homepage    = 'https://github.com/chrokh/normalizr'
   s.license     = 'MIT'
+
+  s.add_development_dependency 'rspec', '~> 3.0'
 end
